@@ -16,7 +16,7 @@ spec:
       labels:
         app: aws-iam-tester
       annotations:
-        iam.amazonaws.com/role: arn:aws:iam::140839674073:role/kube2iamroleforpods
+        iam.amazonaws.com/role: arn:aws:iam::accountnumber:role/kube2iamroleforpods
     spec:
       containers:
       - name: aws-iam-tester
