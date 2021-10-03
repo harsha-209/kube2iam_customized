@@ -106,7 +106,10 @@ kubectl apply -f kube2iam.yaml file
 
 
 10. now check it where above kube2iam service is running or not , if everything ok now launch you pod with pod role follow below pod yaml file
-11. kubectl apply -f podaws.yaml file
+
+now copy above pod role into below pod manifest file and run it 
+
+12. kubectl apply -f podaws.yaml file
 
 
 
