@@ -1,5 +1,135 @@
 # kube2iam_customized
 
+As per my understanding first setup a kubernetes cluster in 2 vm's or EC2 instances
+
+steps to follow me:
+
+1. attach a iam role to worker node server (node server(like ec2 or vm)
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+
+
+attach required permissions for this above iam roles for workernode machines
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*",
+                "s3-object-lambda:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+
+
+2. now attach above iam role to workernode machines
+
+
+
+4. now create a role for pod follow below steps:
+
+
+
+  i) create a role with ec2 assume role
+  ii) now edit that trust relationship with this below role
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    },
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "YOUR_NODE_ROLE"  ###  paste here above created role arn here 
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+4. after editing or  creating a above role
+5. now attach required permission for your above role
+6. {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*",
+                "s3-object-lambda:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+7. now we completed creating two roles ,1. for workernode and 2 . for pods
+
+8. now we have to create a service account for permissions for other pods in cluster 
+9. copy that above serviceaccount yaml file and run
+
+
+kubectl apply -f service_account.yaml
+
+after creating above service account now run that kube2iam service 
+
+
+
+now copy  kube2iam.yaml script and run 
+
+kubectl apply -f kube2iam.yaml file
+
+
+
+10. now check it where above kube2iam service is running or not , if everything ok now launch you pod with pod role follow below pod yaml file
+11. kubectl apply -f kube2iam_pod.yaml file
+
+
+
+
+kubectl 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 you can refer this below link
 https://www.bluematador.com/blog/iam-access-in-kubernetes-installing-kube2iam-in-production
