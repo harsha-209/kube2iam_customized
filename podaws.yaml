@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-iam-tester
+  labels:
+    app: aws-iam-tester
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: aws-iam-tester
+  template:
+    metadata:
+      labels:
+        app: aws-iam-tester
+      annotations:
+        iam.amazonaws.com/role: arn:aws:iam::140839674073:role/kube2iamroleforpods
+    spec:
+      containers:
+      - name: aws-iam-tester
+        image: garland/aws-cli-docker:latest
+        imagePullPolicy: Always
+        command:
+          - /bin/sleep
+        args:
+          - "3600"
+        env:
+          - name: AWS_DEFAULT_REGION
+            value: ap-south-1
